@@ -1,0 +1,56 @@
+name: Update README guide index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "guides/**/guide.md"
+
+permissions:
+  contents: write
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Regenerate index table
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          guides_dir = Path("guides")
+          rows = []
+
+          for guide_path in sorted(guides_dir.glob("*/guide.md")):
+              code = guide_path.parent.name
+              text = guide_path.read_text(encoding="utf-8")
+              match = re.search(r"^#\s*(\S+)\s*—\s*(.+)$", text, re.MULTILINE)
+              name = match.group(2).strip() if match else "(untitled)"
+              rows.append((code, name, f"guides/{code}/guide.md"))
+
+          rows.sort(key=lambda r: r[0])
+
+          table_lines = ["| Code | Course | Guide |", "|------|--------|-------|"]
+          for code, name, path in rows:
+              table_lines.append(f"| {code} | {name} | [View]({path}) |")
+          table = "\n".join(table_lines)
+
+          readme = Path("README.md")
+          content = readme.read_text(encoding="utf-8")
+          content = re.sub(
+              r"(<!-- AUTO-GENERATED:START -->).*?(<!-- AUTO-GENERATED:END -->)",
+              lambda m: f"{m.group(1)}\n{table}\n{m.group(2)}",
+              content,
+              flags=re.DOTALL,
+          )
+          readme.write_text(content, encoding="utf-8")
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet README.md || (git add README.md && git commit -m "chore: update guide index [skip ci]" && git push)
