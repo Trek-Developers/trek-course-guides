@@ -1,7 +1,5 @@
 # AI2002 — Artificial Intelligence
 
-<!-- One or two lines: what is this course actually like, day to day? -->
-
 ## Overview
 
 <!-- Pace, difficulty, instructor-dependent quirks, what to expect overall. -->
