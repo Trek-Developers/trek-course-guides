@@ -52,6 +52,7 @@ trek-course-guides/
 | Code | Course | Guide |
 |------|--------|-------|
 | AI2002 | Artificial Intelligence | [View](guides/AI2002/guide.md) |
+| CS2005 | Database Systems | [View](guides/CS2005/guide.md) |
 <!-- AUTO-GENERATED:END -->
 
 ## License
