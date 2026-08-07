@@ -1,43 +1,37 @@
-name: Update README guide index
-
+name: Update README guide index and contributor logs
 on:
   push:
     branches: [main]
     paths:
       - "guides/**/guide.md"
-
 permissions:
   contents: write
-
 jobs:
   update-index:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Regenerate index table
         run: |
           python3 - <<'PY'
           import re
           from pathlib import Path
-
           guides_dir = Path("guides")
           rows = []
-
           for guide_path in sorted(guides_dir.glob("*/guide.md")):
               code = guide_path.parent.name
               text = guide_path.read_text(encoding="utf-8")
               match = re.search(r"^#\s*(\S+)\s*—\s*(.+)$", text, re.MULTILINE)
               name = match.group(2).strip() if match else "(untitled)"
               rows.append((code, name, f"guides/{code}/guide.md"))
-
           rows.sort(key=lambda r: r[0])
-
           table_lines = ["| Code | Course | Guide |", "|------|--------|-------|"]
           for code, name, path in rows:
               table_lines.append(f"| {code} | {name} | [View]({path}) |")
           table = "\n".join(table_lines)
-
           readme = Path("README.md")
           content = readme.read_text(encoding="utf-8")
           content = re.sub(
@@ -49,8 +43,76 @@ jobs:
           readme.write_text(content, encoding="utf-8")
           PY
 
+      - name: Determine changed guides
+        id: changed
+        run: |
+          # github.event.before is all-zeros on the first push to a new branch;
+          # fall back to diffing against the parent commit in that case.
+          BEFORE="${{ github.event.before }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE=$(git rev-parse "${{ github.sha }}~1" 2>/dev/null || echo "")
+          fi
+          if [ -z "$BEFORE" ]; then
+            CODES=$(git ls-tree -r --name-only HEAD | grep -E '^guides/[^/]+/guide\.md$' | sed -E 's#guides/([^/]+)/guide\.md#\1#' | sort -u | paste -sd, -)
+          else
+            CODES=$(git diff --name-only "$BEFORE" "${{ github.sha }}" | grep -E '^guides/[^/]+/guide\.md$' | sed -E 's#guides/([^/]+)/guide\.md#\1#' | sort -u | paste -sd, -)
+          fi
+          echo "codes=$CODES" >> "$GITHUB_OUTPUT"
+
+      - name: Regenerate contributor logs
+        if: steps.changed.outputs.codes != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          IFS=',' read -ra CODES <<< "${{ steps.changed.outputs.codes }}"
+          for code in "${CODES[@]}"; do
+            path="guides/$code/guide.md"
+            [ -f "$path" ] || continue
+            echo "Fetching commit history for $path"
+            gh api "repos/${{ github.repository }}/commits?path=$path&per_page=100" --paginate \
+              > "guides/$code/_commits.json"
+            python3 - "$code" <<'PY'
+          import json, sys
+          from pathlib import Path
+
+          code = sys.argv[1]
+          commits = json.loads(Path(f"guides/{code}/_commits.json").read_text())
+
+          seen = {}
+          order = []
+          for c in commits:
+              author = c.get("author")
+              if author:
+                  key = author["login"]
+                  if key not in seen:
+                      seen[key] = {
+                          "login": author["login"],
+                          "html_url": author["html_url"],
+                          "avatar_url": author["avatar_url"],
+                          "commits": 0,
+                      }
+                      order.append(key)
+                  seen[key]["commits"] += 1
+              else:
+                  name = c.get("commit", {}).get("author", {}).get("name", "Unknown")
+                  key = f"name:{name}"
+                  if key not in seen:
+                      seen[key] = {"name": name, "commits": 0}
+                      order.append(key)
+                  seen[key]["commits"] += 1
+
+          contributors = sorted(
+              (seen[k] for k in order), key=lambda c: c["commits"], reverse=True
+          )
+          out = {"guide_path": f"guides/{code}/guide.md", "contributors": contributors}
+          Path(f"guides/{code}/contributors.json").write_text(json.dumps(out, indent=2) + "\n")
+          Path(f"guides/{code}/_commits.json").unlink()
+          PY
+          done
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git diff --quiet README.md || (git add README.md && git commit -m "chore: update guide index [skip ci]" && git push)
+          git add README.md guides
+          git diff --quiet --cached || (git commit -m "chore: update guide index and contributor logs [skip ci]" && git push)
