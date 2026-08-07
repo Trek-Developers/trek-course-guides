@@ -49,10 +49,9 @@ trek-course-guides/
 ## Guides
 
 <!-- AUTO-GENERATED:START -->
-<!-- This table is regenerated automatically by .github/workflows/update-readme.yml
-     whenever a guide is added or edited. Don't edit it by hand. -->
 | Code | Course | Guide |
 |------|--------|-------|
+| AI2002 | Artificial Intelligence | [View](guides/AI2002/guide.md) |
 <!-- AUTO-GENERATED:END -->
 
 ## License
