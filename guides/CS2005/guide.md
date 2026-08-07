@@ -19,7 +19,7 @@ One quirk: CL2005 (the DB lab) goes deeper into SQL than CS2005 theory lectures 
 ### SQL — DDL, Retrieval, DML, Views (Ch6, Ch7)
 - Key idea: SQL data definition/constraints, basic + complex retrieval queries, INSERT/DELETE/UPDATE, views, schema changes.
 - Doing the CL2005 lab tasks yourself covers this — no separate theory prep needed if you actually do the lab work instead of copying it.
-- Extra practice: [CS50SQL](https://cs50.harvard.edu/sql/) — Week 0 (Querying) and Week 1 (Relating) map almost exactly onto Ch5/6/7.
+- Extra practice: [CS50SQL](https://cs50.harvard.edu/sql/) — Week 0 (Querying), Week 1 (Relating) and Week 2 (Designing) map almost exactly onto Ch5/6/7.
 
 ### ER Modeling (Ch3)
 - Key idea: entity types, relationships, structural constraints, ER diagrams, naming conventions, higher-degree relationships.
@@ -60,7 +60,7 @@ One quirk: CL2005 (the DB lab) goes deeper into SQL than CS2005 theory lectures 
 
 ## Useful Links
 - Trek's own **past papers** and **notes** sections for this course — read the notes, solve the past papers. This was called out as the single most useful external resource.
-- [CS50SQL](https://cs50.harvard.edu/sql/) (Week 0 & Week 1) for extra SQL practice alongside Ch5/6/7
+- [CS50SQL](https://cs50.harvard.edu/sql/) (Week 0, Week 1 & Week 2) for extra SQL practice alongside Ch5/6/7
 - ER Modeling: [playlist](https://www.youtube.com/playlist?list=PLq-1NzkC-4DwTSmQa0dAN0r_3wWhg8kv9) + [recap video](https://youtu.be/LowjDtiNlk4?si=dQos1QuClvav1oKD)
 - Normalization: [playlist](https://www.youtube.com/playlist?list=PLyp-1WQY32mN6U6PUq9c977X9vyHxtohD) + [video 1](https://youtu.be/GFQaEYEc8_8?si=Ij59aiCOtqroC9V6) + [video 2](https://youtu.be/VWnKUKH4tLg?si=iUhIdy1-8dWIsz_z)
 - Relational Algebra Division Operator: [video 1](https://youtu.be/yWxCz8wi0fM?si=bhMg4lLdXxNjyrXv) + [video 2](https://youtu.be/CSI5NStnhDs?si=-UFo6-dcdECMSCvb)
