@@ -20,6 +20,7 @@ One quirk: CL2005 (the DB lab) goes deeper into SQL than CS2005 theory lectures 
 - Key idea: SQL data definition/constraints, basic + complex retrieval queries, INSERT/DELETE/UPDATE, views, schema changes.
 - Doing the CL2005 lab tasks yourself covers this — no separate theory prep needed if you actually do the lab work instead of copying it.
 - Extra practice: [CS50SQL](https://cs50.harvard.edu/sql/) — Week 0 (Querying), Week 1 (Relating) and Week 2 (Designing) map almost exactly onto Ch5/6/7.
+- You can give less time to other topics but give the most time to SQL, because it builds intuition of how database works practically and also helps in most of the courses as its questions come in both mids and finals and will also help in lab course simultaneously.
 
 ### ER Modeling (Ch3)
 - Key idea: entity types, relationships, structural constraints, ER diagrams, naming conventions, higher-degree relationships.
@@ -30,16 +31,19 @@ One quirk: CL2005 (the DB lab) goes deeper into SQL than CS2005 theory lectures 
 - Key idea: SELECT, PROJECT, JOIN, DIVISION and other set-theory-based operations.
 - Best learned off the slides + lots of practice problems. The DIVISION operator specifically is the hard part — budget extra time for it.
 - Watch: [video 1](https://youtu.be/yWxCz8wi0fM?si=bhMg4lLdXxNjyrXv), [video 2](https://youtu.be/CSI5NStnhDs?si=-UFo6-dcdECMSCvb)
+- It's very complicated and if you decide to perfect it, you will waste a lot of time so just learn enough of it
 
 ### Normalization (Ch14)
 - Key idea: functional dependencies, 2NF/3NF/BCNF, multivalued dependencies, 4NF/5NF.
 - The hardest topic. Practice a LOT of questions, especially 0NF→1NF and 2NF — that's where exam questions actually bite. 4NF/5NF was barely tested in this offering — confirm with your own teacher before sinking time into it.
 - Watch: [playlist](https://www.youtube.com/playlist?list=PLyp-1WQY32mN6U6PUq9c977X9vyHxtohD), then [video 1](https://youtu.be/GFQaEYEc8_8?si=Ij59aiCOtqroC9V6) and [video 2](https://youtu.be/VWnKUKH4tLg?si=iUhIdy1-8dWIsz_z)
+- This topic's principles are easy but solving problems is not, make sure to dedicate time for its practice Qs
 
 ### Transaction Processing, Concurrency Control & Recovery (Ch20, Ch21, Ch22)
 - Key idea: ACID properties, schedules/serializability, 2PL and other concurrency control techniques, locking granularity, recovery methods (NO-UNDO/REDO, deferred/immediate update).
 - Overlaps with OS course content (locking etc.) — if you've done that unit in OS already, it'll feel familiar.
 - Watch: [Gate Smasher's playlist](https://youtube.com/playlist?list=PLxCzCOWd7aiFAN6I8CuViBuCdJgiOkT2Y&si=wvW0gXEMXHvUIkh6), starting from lecture 87 onward — but cross-check against your own course slides so you don't study beyond the syllabus.
+- This topic will seem to be very easy if you have studied/studying OS course because concepts are similar just environment difference.
 
 ### NoSQL (Ch24)
 - Key idea: (left for someone else to fill in, wasn't covered in this offering of the course)
